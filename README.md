@@ -11,7 +11,7 @@ The **Programme Governance Dashboard** is a local-first, lightweight analytics t
 👉 [http://cloudpedagogy-programme-governance-dashboard.s3-website.eu-west-2.amazonaws.com/](http://cloudpedagogy-programme-governance-dashboard.s3-website.eu-west-2.amazonaws.com/)
 
 ## 🖼️ Screenshot
-(*Please insert relevant screenshot image path here*)
+![Programme Governance Dashboard Screenshot](assets/screenshot.png)
 
 This screenshot shows the fully rendered Programme Governance Dashboard using the demo dataset included in this repository.
 
