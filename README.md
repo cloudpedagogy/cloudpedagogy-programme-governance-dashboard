@@ -5,6 +5,27 @@ The **Programme Governance Dashboard** is a local-first, lightweight analytics t
 
 📘 **New to the system?** Please refer to the comprehensive [User Manual](USER_MANUAL.md) for detailed step-by-step instructions on navigating the dashboard, interpreting AI oversight signals, and tracking curriculum snapshots.
 
+---
+
+## 🌐 Live Hosted Version
+👉 [http://cloudpedagogy-programme-governance-dashboard.s3-website.eu-west-2.amazonaws.com/](http://cloudpedagogy-programme-governance-dashboard.s3-website.eu-west-2.amazonaws.com/)
+
+## 🖼️ Screenshot
+(*Please insert relevant screenshot image path here*)
+
+This screenshot shows the fully rendered Programme Governance Dashboard using the demo dataset included in this repository.
+
+The demo allows users to explore system-level curriculum structure and governance visibility, including:
+- Relationships between programmes, modules, outcomes, and assessments
+- Identification of duplication, imbalance, and structural gaps
+- Governance metadata and alignment indicators
+- Snapshot comparison of curriculum states (e.g. before/after redesign)
+- Local-first, privacy-preserving interaction (no backend or data transmission)
+
+The demonstration uses entirely synthetic data and represents a fictional multi-programme curriculum environment designed to illustrate governance-aware analysis and system-level insight.
+
+---
+
 ## 2. Key Features
 - **Deterministic Analytics Engine:** Automated logic that detects highly shared modules, unassessed outcomes, and over-concentrated curriculum traps natively.
 - **Programme Comparison Matrix:** Instantly stack up to 3 distinct programmes side-by-side to contrast structural metrics and governance completion.
