@@ -30,33 +30,38 @@ export function OutcomeAlignmentView({ dataset }: OutcomeAlignmentViewProps) {
 
   return (
     <div className="feature-view">
-      <h2>Outcome Alignment</h2>
-      <p className="description">Analyze how outcomes map to modules and assessments.</p>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Outcome Alignment</h2>
+      <p className="text-small" style={{ marginBottom: '2rem' }}>Institutional mapping of learning outcomes to modules and assessments.</p>
       
       <table className="data-table">
         <thead>
           <tr>
-            <th>Outcome</th>
-            <th>Modules</th>
-            <th>Assessments</th>
-            <th>Score</th>
-            <th>Flags</th>
+            <th>Learning Outcome</th>
+            <th style={{ width: '120px' }}>Modules</th>
+            <th style={{ width: '120px' }}>Tests</th>
+            <th style={{ width: '100px' }}>Score</th>
+            <th style={{ width: '180px' }}>Status Signals</th>
           </tr>
         </thead>
         <tbody>
           {outcomeData.map(outcome => (
             <tr key={outcome.id}>
-              <td>{outcome.description} <em>({outcome.id})</em></td>
+              <td>
+                <div style={{ color: 'var(--text-primary)', fontWeight: 500 }}>{outcome.description}</div>
+                <div className="text-small">{outcome.id}</div>
+              </td>
               <td>{outcome.linkedModulesCount}</td>
               <td>{outcome.linkedAssessmentsCount}</td>
-              <td>{outcome.score.toFixed(0)}%</td>
               <td>
-                <div className="badge-group">
-                  {outcome.isUnlinked && <span className="badge badge-danger">Unlinked</span>}
-                  {outcome.isUnassessed && <span className="badge badge-danger">Unassessed</span>}
-                  {outcome.isOverconcentrated && <span className="badge badge-warning">Over-concentrated</span>}
+                <span style={{ fontWeight: 600 }}>{outcome.score.toFixed(0)}%</span>
+              </td>
+              <td>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  {outcome.isUnlinked && <span className="badge">Unlinked</span>}
+                  {outcome.isUnassessed && <span className="badge">Unassessed</span>}
+                  {outcome.isOverconcentrated && <span className="badge" style={{ opacity: 0.8 }}>Concentrated</span>}
                   {(!outcome.isUnlinked && !outcome.isUnassessed && !outcome.isOverconcentrated) && (
-                    <span className="badge badge-success">Healthy</span>
+                    <span className="badge" style={{ border: 'none', backgroundColor: 'transparent', padding: 0 }}>Verified</span>
                   )}
                 </div>
               </td>
@@ -64,7 +69,9 @@ export function OutcomeAlignmentView({ dataset }: OutcomeAlignmentViewProps) {
           ))}
           {outcomeData.length === 0 && (
             <tr>
-              <td colSpan={5}>No outcomes found.</td>
+              <td colSpan={5} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                No learning outcomes found in current governance dataset.
+              </td>
             </tr>
           )}
         </tbody>
@@ -72,3 +79,4 @@ export function OutcomeAlignmentView({ dataset }: OutcomeAlignmentViewProps) {
     </div>
   );
 }
+

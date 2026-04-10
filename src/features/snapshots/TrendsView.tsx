@@ -42,17 +42,26 @@ export function TrendsView({ dataset }: TrendsViewProps) {
 
   return (
     <div className="feature-view">
-      <h2>Trends & Comparison</h2>
-      <p className="description">Compare the live dataset metrics against historically saved snapshots.</p>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Trends & Comparison</h2>
+      <p className="text-small" style={{ marginBottom: '2rem' }}>Compare the live dataset metrics against historically saved institutional snapshots.</p>
 
       <div style={{ margin: '2rem 0' }}>
-        <strong>Select Snapshot to Compare: </strong>
+        <h4 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>Comparison Snapshot</h4>
         <select 
           value={selectedSnapshotId} 
           onChange={e => setSelectedSnapshotId(e.target.value)}
-          style={{ padding: '0.5rem', marginLeft: '1rem', borderRadius: '4px', border: '1px solid #ccc' }}
+          style={{ 
+            padding: '0.5rem 1rem', 
+            borderRadius: '6px', 
+            border: '1px solid var(--border)',
+            backgroundColor: 'var(--bg)',
+            color: 'var(--text-primary)',
+            fontSize: '0.875rem',
+            width: '100%',
+            maxWidth: '400px'
+          }}
         >
-          <option value="">-- Choose Snapshot --</option>
+          <option value="">-- Choose Historical Snapshot --</option>
           {snapshots.map(s => (
             <option key={s.id} value={s.id}>{s.name || s.id} ({new Date(s.timestamp).toLocaleDateString()})</option>
           ))}
@@ -63,13 +72,13 @@ export function TrendsView({ dataset }: TrendsViewProps) {
         <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
           
           <div style={{ flex: '1', minWidth: '300px' }}>
-            <h3>Metric Variance</h3>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1rem' }}>Metric Variance</h3>
             <table className="data-table">
               <thead>
                 <tr>
                   <th>Indicator</th>
-                  <th>Snapshot</th>
-                  <th>Current</th>
+                  <th>Snap</th>
+                  <th>Live</th>
                   <th>Diff</th>
                 </tr>
               </thead>
@@ -79,11 +88,13 @@ export function TrendsView({ dataset }: TrendsViewProps) {
                   const diff = currentVal - snapVal;
                   return (
                     <tr key={key}>
-                      <td style={{ textTransform: 'capitalize' }}>{key.replace(/([A-Z])/g, ' $1').trim()}</td>
+                      <td style={{ textTransform: 'capitalize', color: 'var(--text-secondary)' }}>{key.replace(/([A-Z])/g, ' $1').trim()}</td>
                       <td>{snapVal.toFixed(1)}</td>
-                      <td><strong>{currentVal.toFixed(1)}</strong></td>
-                      <td className={diff > 0 ? 'text-success' : diff < 0 ? 'text-danger' : ''}>
-                        {diff > 0 ? '+' : ''}{diff.toFixed(1)}
+                      <td><span style={{ fontWeight: 600 }}>{currentVal.toFixed(1)}</span></td>
+                      <td>
+                        <span className="badge" style={{ opacity: diff === 0 ? 0.4 : 1 }}>
+                          {diff > 0 ? '+' : ''}{diff.toFixed(1)}
+                        </span>
                       </td>
                     </tr>
                   );
@@ -93,13 +104,13 @@ export function TrendsView({ dataset }: TrendsViewProps) {
           </div>
 
           <div style={{ flex: '1', minWidth: '300px' }}>
-            <h3>Structural Variance</h3>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1rem' }}>Structural Variance</h3>
             <table className="data-table">
               <thead>
                 <tr>
                   <th>Metric</th>
-                  <th>Snapshot</th>
-                  <th>Current</th>
+                  <th>Snap</th>
+                  <th>Live</th>
                   <th>Diff</th>
                 </tr>
               </thead>
@@ -109,12 +120,14 @@ export function TrendsView({ dataset }: TrendsViewProps) {
                   const diff = snapVal !== 'N/A' ? (currentVal - snapVal) : 0;
                   return (
                     <tr key={key}>
-                      <td style={{ textTransform: 'capitalize' }}>{key.replace(/([A-Z])/g, ' $1').trim()}</td>
+                      <td style={{ textTransform: 'capitalize', color: 'var(--text-secondary)' }}>{key.replace(/([A-Z])/g, ' $1').trim()}</td>
                       <td>{snapVal}</td>
-                      <td><strong>{currentVal}</strong></td>
+                      <td><span style={{ fontWeight: 600 }}>{currentVal}</span></td>
                       {snapVal !== 'N/A' ? (
-                        <td className={diff > 0 ? 'text-primary' : diff < 0 ? 'text-warning' : ''}>
-                          {diff > 0 ? '+' : ''}{diff}
+                        <td>
+                          <span className="badge" style={{ opacity: diff === 0 ? 0.4 : 1 }}>
+                            {diff > 0 ? '+' : ''}{diff}
+                          </span>
                         </td>
                       ) : <td>-</td>}
                     </tr>
@@ -126,12 +139,13 @@ export function TrendsView({ dataset }: TrendsViewProps) {
 
         </div>
       ) : (
-        <div style={{ padding: '2rem', backgroundColor: '#f8f9fa', borderRadius: '8px', textAlign: 'center', color: '#6c757d' }}>
+        <div style={{ padding: '4rem 2rem', border: '1px dashed var(--border)', borderRadius: '8px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
           {snapshots.length === 0 
             ? "No snapshots available. Save one from the action bar to enable trend comparison."
-            : "Select a snapshot above to view variances."}
+            : "Select a snapshot above to view institutional variances."}
         </div>
       )}
     </div>
   );
 }
+

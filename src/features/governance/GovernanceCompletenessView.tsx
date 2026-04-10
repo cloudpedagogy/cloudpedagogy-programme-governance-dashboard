@@ -34,38 +34,60 @@ export function GovernanceCompletenessView({ dataset }: GovernanceCompletenessVi
 
   return (
     <div className="feature-view">
-      <h2>Governance Completeness</h2>
-      <p className="description">Drill down into the detailed governance checklist for all modules.</p>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Governance Completeness</h2>
+      <p className="text-small" style={{ marginBottom: '2rem' }}>Detailed institutional governance checklist and completeness mapping for all modules.</p>
       
       <table className="data-table">
         <thead>
           <tr>
             <th>Module</th>
-            <th>Doc Outcomes</th>
-            <th>Assessment Map</th>
-            <th>Dep Clarity</th>
-            <th>Prog Align</th>
-            <th>Total Score</th>
+            <th style={{ width: '100px' }}>Outcomes</th>
+            <th style={{ width: '100px' }}>Assessment</th>
+            <th style={{ width: '100px' }}>Dependency</th>
+            <th style={{ width: '100px' }}>Alignment</th>
+            <th style={{ width: '120px' }}>Aggregate</th>
           </tr>
         </thead>
         <tbody>
           {govData.map(data => (
             <tr key={data.id}>
-              <td><strong>{data.code}</strong>: {data.title}</td>
-              <td className={data.docOut < 100 ? 'text-warning' : 'text-success'}>{data.docOut.toFixed(0)}%</td>
-              <td className={data.asMap < 100 ? 'text-warning' : 'text-success'}>{data.asMap.toFixed(0)}%</td>
-              <td className={data.depClarity < 100 ? 'text-warning' : 'text-success'}>{data.depClarity.toFixed(0)}%</td>
-              <td className={data.progAlign < 100 ? 'text-warning' : 'text-success'}>{data.progAlign.toFixed(0)}%</td>
               <td>
-                <strong className={data.score < 80 ? 'text-danger' : data.score < 100 ? 'text-warning' : 'text-success'}>
-                  {data.score.toFixed(0)}%
-                </strong>
+                <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{data.code}</div>
+                <div className="text-small">{data.title}</div>
+              </td>
+              <td>
+                <span style={{ fontWeight: data.docOut === 100 ? 600 : 400, color: data.docOut === 100 ? 'var(--text-primary)' : 'var(--text-muted)' }}>
+                  {data.docOut.toFixed(0)}%
+                </span>
+              </td>
+              <td>
+                <span style={{ fontWeight: data.asMap === 100 ? 600 : 400, color: data.asMap === 100 ? 'var(--text-primary)' : 'var(--text-muted)' }}>
+                  {data.asMap.toFixed(0)}%
+                </span>
+              </td>
+              <td>
+                <span style={{ fontWeight: data.depClarity === 100 ? 600 : 400, color: data.depClarity === 100 ? 'var(--text-primary)' : 'var(--text-muted)' }}>
+                  {data.depClarity.toFixed(0)}%
+                </span>
+              </td>
+              <td>
+                <span style={{ fontWeight: data.progAlign === 100 ? 600 : 400, color: data.progAlign === 100 ? 'var(--text-primary)' : 'var(--text-muted)' }}>
+                  {data.progAlign.toFixed(0)}%
+                </span>
+              </td>
+              <td>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{data.score.toFixed(0)}%</span>
+                  {data.score < 80 && <span className="badge">Review Req.</span>}
+                </div>
               </td>
             </tr>
           ))}
           {govData.length === 0 && (
             <tr>
-              <td colSpan={6}>No modules found.</td>
+              <td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                No modules found in current governance dataset.
+              </td>
             </tr>
           )}
         </tbody>
@@ -73,3 +95,4 @@ export function GovernanceCompletenessView({ dataset }: GovernanceCompletenessVi
     </div>
   );
 }
+

@@ -32,55 +32,68 @@ export function AIGovernanceView({ dataset, onSelectDetail }: AIGovernanceViewPr
 
   return (
     <div className="feature-view">
-      <h2>AI Governance Records</h2>
-      <p className="description">Interpretive oversight records tracking AI-supported curriculum generation and mapping events.</p>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>AI Governance Records</h2>
+      <p className="text-small" style={{ marginBottom: '2rem' }}>Interpretive oversight records tracking AI-supported curriculum generation and mapping events.</p>
       
       <table className="data-table">
         <thead>
           <tr>
-            <th>Entity Type</th>
-            <th>Target Label</th>
-            <th>AI Used</th>
-            <th>Use Type</th>
-            <th>Oversight Traces</th>
-            <th>Oversight Readiness</th>
-            <th>Action</th>
+            <th>Entity</th>
+            <th style={{ width: '100px' }}>AI Assist</th>
+            <th>AIG Use Type</th>
+            <th style={{ width: '180px' }}>Oversight Traces</th>
+            <th style={{ width: '120px' }}>Readiness</th>
+            <th style={{ width: '100px' }}>Action</th>
           </tr>
         </thead>
         <tbody>
           {recordData.map(data => (
             <tr key={data.id}>
-              <td style={{ textTransform: 'capitalize' }}>{data.entityType}</td>
-              <td style={{ maxWidth: '250px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={data.label}>
-                <strong>{data.label}</strong>
-              </td>
-              <td>{data.aiUsed ? 'Yes' : 'No'}</td>
-              <td>{data.aiUseType?.join(', ') || 'Unspecified'}</td>
-              <td style={{ fontSize: '1.2rem', letterSpacing: '2px' }}>
-                <span title="Human Reviewed">{data.humanReviewed ? '✅' : '❌'}</span>
-                <span title="Rationale Recorded">{data.rationaleRecorded ? '✅' : '❌'}</span>
-                <span title="Source Checked">{data.sourceMaterialChecked ? '✅' : '❌'}</span>
-                <span title="Output Modified">{data.outputModifiedByHuman ? '✅' : '❌'}</span>
-                <span title="Accountability Named">{data.accountabilityNamed ? '✅' : '❌'}</span>
+              <td>
+                <div style={{ textTransform: 'uppercase', fontSize: '0.625rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>{data.entityType}</div>
+                <div style={{ fontWeight: 600, color: 'var(--text-primary)', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={data.label}>
+                  {data.label}
+                </div>
               </td>
               <td>
-                <strong className={data.readinessScore < 50 ? 'text-danger' : data.readinessScore < 90 ? 'text-warning' : 'text-success'}>
-                  {data.readinessScore.toFixed(0)}%
-                </strong>
+                <span className="badge" style={{ opacity: data.aiUsed ? 1 : 0.5 }}>{data.aiUsed ? 'Yes' : 'No'}</span>
+              </td>
+              <td>
+                <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap' }}>
+                  {data.aiUseType?.map(type => (
+                    <span key={type} className="text-small">{type}</span>
+                  )) || <span className="text-small">Direct</span>}
+                </div>
+              </td>
+              <td style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }}>
+                  <span style={{ color: data.humanReviewed ? 'var(--text-primary)' : 'inherit' }}>{data.humanReviewed ? '●' : '○'} Review</span>
+                  <span style={{ color: data.rationaleRecorded ? 'var(--text-primary)' : 'inherit' }}>{data.rationaleRecorded ? '●' : '○'} Rationale</span>
+                  <span style={{ color: data.sourceMaterialChecked ? 'var(--text-primary)' : 'inherit' }}>{data.sourceMaterialChecked ? '●' : '○'} Source</span>
+                  <span style={{ color: data.outputModifiedByHuman ? 'var(--text-primary)' : 'inherit' }}>{data.outputModifiedByHuman ? '●' : '○'} Edit</span>
+                </div>
+              </td>
+              <td>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{data.readinessScore.toFixed(0)}%</span>
+                </div>
               </td>
               <td>
                 <button 
-                  className="link-button" 
+                  className="btn btn-secondary" 
+                  style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
                   onClick={() => onSelectDetail?.({ type: 'ai-record', id: data.id })}
                 >
-                  View Detail
+                  Inspect
                 </button>
               </td>
             </tr>
           ))}
           {recordData.length === 0 && (
             <tr>
-              <td colSpan={7}>No AI Governance oversight records discovered.</td>
+              <td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                No AI Governance oversight records discovered.
+              </td>
             </tr>
           )}
         </tbody>
@@ -88,3 +101,4 @@ export function AIGovernanceView({ dataset, onSelectDetail }: AIGovernanceViewPr
     </div>
   );
 }
+

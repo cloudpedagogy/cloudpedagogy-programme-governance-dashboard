@@ -25,40 +25,51 @@ export function ModuleReuseView({ dataset }: ModuleReuseViewProps) {
 
   return (
     <div className="feature-view">
-      <h2>Module Reuse</h2>
-      <p className="description">Explore how modules are distributed across different programmes.</p>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Module Reuse</h2>
+      <p className="text-small" style={{ marginBottom: '2rem' }}>Explore module distribution across institutional programmes.</p>
       
       <table className="data-table">
         <thead>
           <tr>
-            <th>Module Name</th>
-            <th>Programmes Using</th>
-            <th>Status</th>
-            <th>Programme IDs</th>
+            <th>Module</th>
+            <th style={{ width: '150px' }}>Programmes</th>
+            <th style={{ width: '150px' }}>Status</th>
+            <th>Distribution</th>
           </tr>
         </thead>
         <tbody>
           {moduleData.map(mod => (
             <tr key={mod.id}>
               <td>
-                <strong>{mod.code}</strong>: {mod.title}
+                <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{mod.code}</div>
+                <div className="text-small">{mod.title}</div>
               </td>
-              <td>{mod.programmeCount}</td>
+              <td>
+                <span style={{ fontWeight: 500 }}>{mod.programmeCount}</span>
+              </td>
               <td>
                 {mod.isShared ? (
-                  <span className="badge badge-primary">Shared</span>
+                  <span className="badge">Shared</span>
                 ) : (
-                  <span className="badge badge-default">Single-programme</span>
+                  <span className="badge" style={{ opacity: 0.6 }}>Standard</span>
                 )}
               </td>
               <td>
-                <span className="text-small">{mod.programmes.join(', ')}</span>
+                <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap' }}>
+                  {mod.programmes.map(pId => (
+                    <span key={pId} className="text-small" style={{ border: '1px solid var(--border)', padding: '2px 6px', borderRadius: '4px' }}>
+                      {pId}
+                    </span>
+                  ))}
+                </div>
               </td>
             </tr>
           ))}
           {moduleData.length === 0 && (
             <tr>
-              <td colSpan={4}>No modules found.</td>
+              <td colSpan={4} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                No modules detected in current governance dataset.
+              </td>
             </tr>
           )}
         </tbody>
@@ -66,3 +77,4 @@ export function ModuleReuseView({ dataset }: ModuleReuseViewProps) {
     </div>
   );
 }
+

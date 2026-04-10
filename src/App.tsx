@@ -19,6 +19,9 @@ import { MethodologyView } from './features/dashboard/MethodologyView';
 import { DetailPanel } from './components/DetailPanel';
 import type { DetailItem } from './components/DetailPanel';
 
+import { BrandHeader } from './components/BrandHeader';
+import { BrandFooter } from './components/BrandFooter';
+
 function App() {
   const [dataset, setDataset] = useState<CombinedDataset | null>(null);
   const [currentView, setCurrentView] = useState('Overview');
@@ -75,7 +78,7 @@ function App() {
     const existing = storage.loadSnapshots();
     storage.saveSnapshots([...existing, newSnapshot]);
     alert(`Snapshot '${name}' saved successfully in local storage.`);
-  };
+  }
 
   const handleResetData = () => {
     storage.resetData();
@@ -90,11 +93,15 @@ function App() {
 
   return (
     <div className="dashboard-container">
+      <BrandHeader />
+
       {validationIssues.length > 0 && (
-        <div className="validation-banner" onClick={() => setShowValidation(!showValidation)} style={{ cursor: 'pointer', backgroundColor: '#fff3cd', color: '#856404', padding: '10px 15px', borderRadius: '4px', marginBottom: '1rem', border: '1px solid #ffeeba' }}>
-          <strong>⚠️ Data Integrity Warnings Detected:</strong> {validationIssues.length} issues found. Click to {showValidation ? 'hide' : 'expand'} details.
+        <div className="validation-banner" onClick={() => setShowValidation(!showValidation)}>
+          <div className="validation-summary">
+            <strong>⚠️ Data Integrity Warnings Detected:</strong> {validationIssues.length} issues found. Click to {showValidation ? 'hide' : 'expand'} details.
+          </div>
           {showValidation && (
-            <ul style={{ marginTop: '0.8rem', paddingLeft: '1.5rem', fontSize: '0.9rem' }}>
+            <ul className="validation-details">
               {validationIssues.map((iss, i) => (
                 <li key={i}><strong>[{iss.category.toUpperCase()}]</strong> {iss.message}</li>
               ))}
@@ -103,26 +110,13 @@ function App() {
         </div>
       )}
 
-      <header className="dashboard-header">
-        <h1>Programme Governance Dashboard</h1>
-        <p className="description">
-          A local-first dashboard for curriculum coherence, structural risk, and governance completeness.
-        </p>
-        <div className="disclaimer">
-          <p>
-            <strong>Disclaimer:</strong> This dashboard provides structured indicators to support interpretation and reflection. It does not replace professional judgement or institutional decision-making.
-          </p>
+      {!dataset && (
+        <div className="action-bar-empty">
+          <button onClick={handleLoadDemo} className="btn btn-primary">Initialize Governance Dashboard</button>
         </div>
-        
-        <div className="action-bar">
-          <button onClick={handleLoadDemo} className="btn btn-primary">Load Demo Data</button>
-          <button onClick={handleSaveSnapshot} className="btn btn-secondary">Save Snapshot</button>
-          <button onClick={() => setCurrentView('Snapshot Trends')} className="btn btn-secondary">View Trends</button>
-          <button onClick={handleResetData} className="btn btn-danger">Reset Local State</button>
-        </div>
-      </header>
+      )}
 
-      {dataset ? (
+      {dataset && (
         <>
           <nav className="view-nav">
             {VIEWS.map(view => (
@@ -136,7 +130,16 @@ function App() {
             ))}
           </nav>
 
-          <div className="view-content">
+          <div className="view-header">
+            <div className="action-bar">
+              <button onClick={handleLoadDemo} className="btn btn-secondary">Reload Data</button>
+              <button onClick={handleSaveSnapshot} className="btn btn-secondary">Save Snapshot</button>
+              <button onClick={() => setCurrentView('Snapshot Trends')} className="btn btn-secondary">View Trends</button>
+              <button onClick={handleResetData} className="btn btn-danger-link">Reset State</button>
+            </div>
+          </div>
+
+          <main className="view-content">
             {currentView === 'Overview' && <Overview dataset={dataset} onSelectDetail={setSelectedDetail} />}
             {currentView === 'Programme Comparison' && <ProgrammeComparisonView dataset={dataset} onSelectDetail={setSelectedDetail} />}
             {currentView === 'Module Reuse' && <ModuleReuseView dataset={dataset} />}
@@ -146,12 +149,8 @@ function App() {
             {currentView === 'AI Governance' && <AIGovernanceView dataset={dataset} onSelectDetail={setSelectedDetail} />}
             {currentView === 'Snapshot Trends' && <TrendsView dataset={dataset} />}
             {currentView === 'Methodology' && <MethodologyView />}
-          </div>
+          </main>
         </>
-      ) : (
-        <section className="dataset-overview" style={{ marginTop: '2rem' }}>
-          <p>No data loaded. Click 'Load Demo Data' to begin.</p>
-        </section>
       )}
 
       {selectedDetail && dataset && (
@@ -161,8 +160,11 @@ function App() {
           onClose={() => setSelectedDetail(null)} 
         />
       )}
+
+      <BrandFooter />
     </div>
   );
 }
+
 
 export default App;

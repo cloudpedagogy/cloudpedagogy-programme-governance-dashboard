@@ -19,41 +19,51 @@ export function AssessmentLoadView({ dataset }: AssessmentLoadViewProps) {
 
   return (
     <div className="feature-view">
-      <h2>Assessment Load Balance</h2>
-      <p className="description">Review the distribution of assessment deadlines across weeks.</p>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Assessment Load Balance</h2>
+      <p className="text-small" style={{ marginBottom: '2rem' }}>Institutional review of assessment deadline distribution and scheduling risk.</p>
       
-      <div className="summary-panel" style={{ marginBottom: '2rem' }}>
-        <h3>Type Distribution</h3>
-        <ul className="inline-list">
+      <section className="kpi-card" style={{ marginBottom: '2.5rem' }}>
+        <h4 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>Type Distribution</h4>
+        <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
           {Object.entries(loadMetrics.typeDistribution).map(([type, count]) => (
-            <li key={type}><strong>{type}:</strong> {count}</li>
+            <div key={type}>
+              <span className="text-small">{type}</span>
+              <div style={{ fontSize: '1.125rem', fontWeight: 600 }}>{count}</div>
+            </div>
           ))}
-        </ul>
-      </div>
+        </div>
+      </section>
 
       <table className="data-table">
         <thead>
           <tr>
-            <th>Week</th>
-            <th>Total Assessments</th>
-            <th>Risk Level</th>
+            <th style={{ width: '150px' }}>Academic Week</th>
+            <th style={{ width: '200px' }}>Total Assessments</th>
+            <th>Governance Signal</th>
           </tr>
         </thead>
         <tbody>
           {weekData.map(data => (
-            <tr key={data.week} className={data.risk === 'high' ? 'row-danger' : ''}>
-              <td><strong>Week {data.week}</strong></td>
+            <tr key={data.week} style={data.risk === 'high' ? { backgroundColor: '#fcfcfc' } : {}}>
+              <td>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Week {data.week}</span>
+              </td>
               <td>{data.count}</td>
               <td>
-                <span className={`badge badge-${data.risk === 'high' ? 'danger' : data.risk === 'moderate' ? 'warning' : 'success'}`}>
-                  {data.risk.toUpperCase()}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span className="badge">
+                    {data.risk === 'high' ? 'High Volume' : data.risk === 'moderate' ? 'Moderate' : 'Balanced'}
+                  </span>
+                  {data.risk === 'high' && <span style={{ fontSize: '1rem' }}>⚠️</span>}
+                </div>
               </td>
             </tr>
           ))}
           {weekData.length === 0 && (
             <tr>
-              <td colSpan={3}>No assessment scheduling data found.</td>
+              <td colSpan={3} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                No assessment scheduling data detected.
+              </td>
             </tr>
           )}
         </tbody>
@@ -61,3 +71,4 @@ export function AssessmentLoadView({ dataset }: AssessmentLoadViewProps) {
     </div>
   );
 }
+

@@ -148,30 +148,37 @@ export function InsightsPanel({ dataset, onSelectDetail }: InsightsPanelProps) {
 
   return (
     <div className="insights-panel">
-      <h3>Governance Insights</h3>
+      <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1.25rem' }}>Governance Insights</h3>
       {insights.length === 0 ? (
-        <p className="text-small">No significant structural risks detected.</p>
+        <div style={{ padding: '2rem', border: '1px dashed var(--border)', borderRadius: '6px', textAlign: 'center' }}>
+          <p className="text-small" style={{ margin: 0 }}>No significant structural risks detected.</p>
+        </div>
       ) : (
-        <ul className="insights-list">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {insights.map(insight => (
-            <li key={insight.id} className={`insight-item insight-${insight.severity}`}>
-              <span className={`badge badge-${insight.severity === 'concern' ? 'danger' : insight.severity === 'attention' ? 'warning' : 'primary'}`} style={{ marginRight: '0.5rem' }}>
-                {insight.severity.toUpperCase()}
-              </span>
-              <span className="insight-message">{insight.message}</span>
-              {insight.detailItem && (
-                <button 
-                  className="link-button" 
-                  onClick={() => onSelectDetail?.(insight.detailItem!)}
-                  style={{ marginLeft: '1rem' }}
-                >
-                  View Details &rarr;
-                </button>
-              )}
-            </li>
+            <div key={insight.id} className={`insight-item insight-${insight.severity}`}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                <span className="badge">
+                  {insight.severity === 'concern' ? 'Critical' : insight.severity === 'attention' ? 'Alert' : 'Notice'}
+                </span>
+                {insight.detailItem && (
+                  <button 
+                    className="link-button" 
+                    onClick={() => onSelectDetail?.(insight.detailItem!)}
+                    style={{ fontSize: '0.75rem' }}
+                  >
+                    View Detail
+                  </button>
+                )}
+              </div>
+              <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-primary)', lineHeight: '1.4' }}>
+                {insight.message}
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
 }
+

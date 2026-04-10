@@ -23,26 +23,44 @@ export function DetailPanel({ item, dataset, onClose }: DetailPanelProps) {
       
       content = (
         <div>
-          <h3>Module: {mod.code} - {mod.title}</h3>
-          <p><strong>Credits:</strong> {mod.credits}</p>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Module Detail</h3>
+          <h4 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem' }}>{mod.code}: {mod.title}</h4>
+          
           <div className="detail-section">
-            <h4>Usage & Alignment</h4>
-            <p className="detail-explanation">Shows where this module is taught and how robust its curriculum footprint is.</p>
-            <ul>
-              <li>Used in <strong>{usingProgs.length}</strong> programme(s): {usingProgs.map(p => p.title).join(', ')}</li>
-              <li>Outcomes mapped: {mod.outcomes.length}</li>
-              <li>Assessments mapped: {mod.assessments.length}</li>
-            </ul>
+            <h4 style={{ fontSize: 'var(--font-size-meta)', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>Structure & Usage</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div>
+                <span className="text-small">Credits</span>
+                <div style={{ fontWeight: 600 }}>{mod.credits}</div>
+              </div>
+              <div>
+                <span className="text-small">Programmes</span>
+                <div style={{ fontWeight: 600 }}>{usingProgs.length}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: '1rem' }}>
+              <span className="text-small">Aligned Outcomes</span>
+              <div style={{ fontWeight: 600 }}>{mod.outcomes.length}</div>
+            </div>
           </div>
+
           <div className="detail-section">
-            <h4>Governance ({score.toFixed(0)}%)</h4>
-            <p className="detail-explanation">Exposes the specific missing compliance documentation for this module.</p>
-            <ul>
-              <li>Documented Outcomes: {(govMeta.documentedOutcomes ?? 0) * 100}%</li>
-              <li>Assessment Mapping: {(govMeta.assessmentMapping ?? 0) * 100}%</li>
-              <li>Dependency Clarity: {(govMeta.dependencyClarity ?? 0) * 100}%</li>
-              <li>Programme Alignment: {(govMeta.programmeAlignmentEvidence ?? 0) * 100}%</li>
-            </ul>
+            <h4 style={{ fontSize: 'var(--font-size-meta)', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>Governance Completeness ({score.toFixed(0)}%)</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {[
+                { label: 'Documented Outcomes', value: govMeta.documentedOutcomes },
+                { label: 'Assessment Mapping', value: govMeta.assessmentMapping },
+                { label: 'Dependency Clarity', value: govMeta.dependencyClarity },
+                { label: 'Programme Alignment', value: govMeta.programmeAlignmentEvidence }
+              ].map(meta => (
+                <div key={meta.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span className="text-small">{meta.label}</span>
+                  <span className="badge" style={{ opacity: (meta.value ?? 0) === 1 ? 1 : 0.6 }}>
+                    {(meta.value ?? 0) * 100}%
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       );
@@ -53,15 +71,36 @@ export function DetailPanel({ item, dataset, onClose }: DetailPanelProps) {
       const linkedModules = dataset.modules.filter(m => m.outcomes.some(o => o.id === outcome.id));
       content = (
         <div>
-          <h3>Outcome: {outcome.id}</h3>
-          <p className="outcome-text">"{outcome.description}"</p>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Outcome Analysis</h3>
+          <div style={{ padding: '1.25rem', backgroundColor: '#fcfcfc', border: '1px solid var(--border)', borderRadius: '6px', marginBottom: '1.5rem' }}>
+            <div className="text-small" style={{ marginBottom: '0.5rem', fontWeight: 600 }}>{outcome.id}</div>
+            <div style={{ fontSize: '1rem', color: 'var(--text-primary)', lineHeight: '1.5' }}>"{outcome.description}"</div>
+          </div>
+
           <div className="detail-section">
-            <h4>Curriculum Linkage</h4>
-            <p className="detail-explanation">Identifies structural orphan risks. Outcomes with no modules or assessments are curriculum defects.</p>
-            <ul>
-              <li><strong>Modules Teaching this:</strong> {linkedModules.length === 0 ? <span className="text-danger">None</span> : linkedModules.map(m => m.code).join(', ')}</li>
-              <li><strong>Aligned Assessments:</strong> {outcome.alignedAssessments.length === 0 ? <span className="text-danger">None</span> : outcome.alignedAssessments.join(', ')}</li>
-            </ul>
+            <h4 style={{ fontSize: 'var(--font-size-meta)', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>Curriculum Mapping</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <span className="text-small">Linked Modules</span>
+                <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
+                  {linkedModules.length === 0 ? (
+                    <span className="badge">No Modules Linked</span>
+                  ) : linkedModules.map(m => (
+                    <span key={m.id} className="badge">{m.code}</span>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <span className="text-small">Aligned Assessments</span>
+                <div style={{ display: 'flex', gap: '0.25rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
+                  {outcome.alignedAssessments.length === 0 ? (
+                    <span className="badge">No Assessments Aligned</span>
+                  ) : outcome.alignedAssessments.map(as => (
+                    <span key={as} className="badge">{as}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       );
@@ -72,15 +111,22 @@ export function DetailPanel({ item, dataset, onClose }: DetailPanelProps) {
     
     content = (
       <div>
-        <h3>Assessment Load: Week {weekNum}</h3>
-        <p className="detail-explanation">Examines student and staff structural overload by looking at assessment clustering.</p>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Workload Review</h3>
+        <h4 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem' }}>Academic Week {weekNum}</h4>
+        
         <div className="detail-section">
-          <h4>Assessments ({assessmentsInWeek.length} total)</h4>
-          <ul>
+          <h4 style={{ fontSize: 'var(--font-size-meta)', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1.25rem' }}>Assessments ({assessmentsInWeek.length})</h4>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {assessmentsInWeek.map(a => (
-              <li key={a.id}><strong>{a.type}</strong> (Weighting: {a.weighting}%) - Linked to {a.linkedOutcomes.length} outcomes</li>
+              <div key={a.id} style={{ padding: '1rem', border: '1px solid var(--border)', borderRadius: '6px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                  <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{a.type}</span>
+                  <span className="badge">{a.weighting}% Weight</span>
+                </div>
+                <div className="text-small">Mapped to {a.linkedOutcomes.length} learning outcomes</div>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     );
@@ -89,19 +135,31 @@ export function DetailPanel({ item, dataset, onClose }: DetailPanelProps) {
     if (prog) {
       content = (
         <div>
-          <h3>Programme: {prog.title}</h3>
-          <p>{prog.description}</p>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>Programme Governance</h3>
+          <h4 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1.5rem' }}>{prog.title}</h4>
+          
           <div className="detail-section">
-            <h4>Structure</h4>
-            <p className="detail-explanation">High-level details of programme volume and basic risk factors.</p>
-            <ul>
-              <li>Modules: {prog.modules.length}</li>
-              <li>Metadata Status: {prog.metadata.status} v{prog.metadata.version}</li>
-              <li>Last Reviewed: {prog.metadata.lastReviewed}</li>
-            </ul>
+            <h4 style={{ fontSize: 'var(--font-size-meta)', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>Summary Details</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span className="text-small">Total Modules</span>
+                <span style={{ fontWeight: 600 }}>{prog.modules.length}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span className="text-small">Governance Status</span>
+                <span className="badge">{prog.metadata.status}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span className="text-small">Version</span>
+                <span style={{ fontWeight: 600 }}>v{prog.metadata.version}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span className="text-small">Last Institutional Review</span>
+                <span style={{ fontWeight: 600 }}>{prog.metadata.lastReviewed}</span>
+              </div>
+            </div>
           </div>
         </div>
-
       );
     }
   } else if (item.type === 'ai-record') {
@@ -114,44 +172,56 @@ export function DetailPanel({ item, dataset, onClose }: DetailPanelProps) {
       
       content = (
         <div>
-          <h3>AI Oversight Record</h3>
-          <p className="detail-explanation">Interpretive oversight signals reflecting transparency in AI-supported processes.</p>
-          <div className="detail-section">
-            <h4>Entity Link</h4>
-            <ul>
-              <li style={{ textTransform: 'capitalize' }}><strong>Type:</strong> {record.entityType}</li>
-              <li><strong>Target:</strong> {label}</li>
-              <li><strong>AI Use Type:</strong> {record.aiUseType?.join(', ') || 'Unspecified'}</li>
-            </ul>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.5rem' }}>AI Oversight Detail</h3>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <span className="badge" style={{ textTransform: 'uppercase', fontSize: 'var(--font-size-meta)' }}>{record.entityType}</span>
+            <div style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginTop: '0.25rem' }}>{label}</div>
           </div>
+          
           <div className="detail-section">
-            <h4>Oversight Traces</h4>
-            <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
-              <li>{record.humanReviewed ? '✅' : '❌'} Human Review Recorded</li>
-              <li>{record.rationaleRecorded ? '✅' : '❌'} Pedagogical Rationale Included</li>
-              <li>{record.sourceMaterialChecked ? '✅' : '❌'} Source Constraints Verified</li>
-              <li>{record.outputModifiedByHuman ? '✅' : '❌'} Output Actively Modified</li>
-              <li>{record.accountabilityNamed ? '✅' : '❌'} Accountability Owner Named</li>
-            </ul>
+            <h4 style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1.25rem' }}>Oversight Checklist</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              {[
+                { label: 'Human Review Recorded', value: record.humanReviewed },
+                { label: 'Pedagogical Rationale', value: record.rationaleRecorded },
+                { label: 'Source Material Verified', value: record.sourceMaterialChecked },
+                { label: 'Active Human Edit', value: record.outputModifiedByHuman },
+                { label: 'Accountability Owner', value: record.accountabilityNamed }
+              ].map(trace => (
+                <div key={trace.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span className="text-small">{trace.label}</span>
+                  <span className="badge" style={{ opacity: trace.value ? 1 : 0.4 }}>
+                    {trace.value ? 'Verified' : 'Missing'}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
+
           <div className="detail-section">
-            <h4>Audit Notes</h4>
-            <p>{record.notes || <em>No specific notes attached to this record.</em>}</p>
-            {record.reviewDate && <p className="text-small" style={{ marginTop: '0.5rem' }}>Reviewed on: {record.reviewDate}</p>}
+            <h4 style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.75rem' }}>Audit Notes</h4>
+            <div style={{ padding: '1rem', backgroundColor: '#fcfcfc', border: '1px solid var(--border)', borderRadius: '6px', fontSize: '0.875rem' }}>
+              {record.notes || <em style={{ opacity: 0.5 }}>No institutional audit notes attached.</em>}
+            </div>
           </div>
         </div>
       );
     }
   }
 
-  if (!content) content = <p>No detailed data found for this item.</p>;
+  if (!content) content = <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-muted)' }}>No detailed data found for this item.</div>;
 
   return (
-    <div className="detail-panel-overlay">
-      <div className="detail-panel">
-        <div className="detail-panel-header">
-          <h2>Detail Viewer</h2>
-          <button className="btn-close" onClick={onClose}>&times;</button>
+    <div className="detail-panel-overlay" onClick={onClose}>
+      <div className="detail-panel" onClick={e => e.stopPropagation()}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border)' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Institutional Data Viewer</span>
+          <button 
+            style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--text-muted)', padding: '0.5rem', lineHeight: 1 }} 
+            onClick={onClose}
+          >
+            &times;
+          </button>
         </div>
         <div className="detail-panel-content">
           {content}
@@ -160,3 +230,4 @@ export function DetailPanel({ item, dataset, onClose }: DetailPanelProps) {
     </div>
   );
 }
+
