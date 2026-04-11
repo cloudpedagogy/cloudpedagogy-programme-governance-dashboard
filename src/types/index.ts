@@ -57,6 +57,11 @@ export interface Snapshot {
     outcomeAlignmentScore: number;
     assessmentLoadBalance: number;
     governanceCompleteness: number;
+    riskProfile?: {
+      red: number;
+      amber: number;
+      green: number;
+    };
   };
   structuralCounts?: {
     programmes: number;
@@ -67,6 +72,17 @@ export interface Snapshot {
     assessments: number;
     overloadedWeeks: number;
   };
+}
+
+export interface DecisionRecord {
+  id: string;
+  entityType: 'programme' | 'module' | 'outcome' | 'assessment';
+  entityId: string;
+  decisionMaker: string;
+  status: 'draft' | 'proposed' | 'approved' | 'rejected';
+  rationale: string;
+  timestamp: string;
+  evidenceReference?: string;
 }
 
 export type AIGovernanceRecord = {
@@ -101,4 +117,5 @@ export interface CombinedDataset {
   skills: Skill[];
   governanceMetadata: Record<string, GovernanceMetadata>; // e.g. keyed by module ID
   aiGovernanceRecords?: AIGovernanceRecord[];
+  decisionRecords?: DecisionRecord[];
 }

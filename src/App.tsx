@@ -13,6 +13,8 @@ import { OutcomeAlignmentView } from './features/outcomes/OutcomeAlignmentView';
 import { AssessmentLoadView } from './features/assessments/AssessmentLoadView';
 import { GovernanceCompletenessView } from './features/governance/GovernanceCompletenessView';
 import { AIGovernanceView } from './features/governance/AIGovernanceView';
+import { HealthSummary } from './features/dashboard/HealthSummary';
+import { DecisionTraceCenter } from './features/governance/DecisionTraceCenter';
 import { ProgrammeComparisonView } from './features/programmes/ProgrammeComparisonView';
 import { TrendsView } from './features/snapshots/TrendsView';
 import { MethodologyView } from './features/dashboard/MethodologyView';
@@ -24,7 +26,7 @@ import { BrandFooter } from './components/BrandFooter';
 
 function App() {
   const [dataset, setDataset] = useState<CombinedDataset | null>(null);
-  const [currentView, setCurrentView] = useState('Overview');
+  const [currentView, setCurrentView] = useState('Summary');
   const [selectedDetail, setSelectedDetail] = useState<DetailItem | null>(null);
   const [validationIssues, setValidationIssues] = useState<ValidationIssue[]>([]);
   const [showValidation, setShowValidation] = useState(false);
@@ -83,13 +85,13 @@ function App() {
   const handleResetData = () => {
     storage.resetData();
     setDataset(null);
-    setCurrentView('Overview');
+    setCurrentView('Summary');
     setSelectedDetail(null);
     setValidationIssues([]);
     setShowValidation(false);
   };
 
-  const VIEWS = ['Overview', 'Programme Comparison', 'Module Reuse', 'Outcome Alignment', 'Assessment Load', 'Governance Completeness', 'AI Governance', 'Snapshot Trends', 'Methodology'];
+  const VIEWS = ['Summary', 'Overview', 'Programme Comparison', 'Module Reuse', 'Outcome Alignment', 'Assessment Load', 'Governance Completeness', 'AI Governance', 'Decision Trace', 'Snapshot Trends', 'Methodology'];
 
   return (
     <div className="dashboard-container">
@@ -140,6 +142,7 @@ function App() {
           </div>
 
           <main className="view-content">
+            {currentView === 'Summary' && <HealthSummary dataset={dataset} />}
             {currentView === 'Overview' && <Overview dataset={dataset} onSelectDetail={setSelectedDetail} />}
             {currentView === 'Programme Comparison' && <ProgrammeComparisonView dataset={dataset} onSelectDetail={setSelectedDetail} />}
             {currentView === 'Module Reuse' && <ModuleReuseView dataset={dataset} />}
@@ -147,6 +150,7 @@ function App() {
             {currentView === 'Assessment Load' && <AssessmentLoadView dataset={dataset} />}
             {currentView === 'Governance Completeness' && <GovernanceCompletenessView dataset={dataset} />}
             {currentView === 'AI Governance' && <AIGovernanceView dataset={dataset} onSelectDetail={setSelectedDetail} />}
+            {currentView === 'Decision Trace' && <DecisionTraceCenter dataset={dataset} />}
             {currentView === 'Snapshot Trends' && <TrendsView dataset={dataset} />}
             {currentView === 'Methodology' && <MethodologyView />}
           </main>

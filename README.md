@@ -3,6 +3,25 @@
 ## 1. Project Description
 The **Programme Governance Dashboard** is a local-first, lightweight analytics tool designed to help academic institutions visualize structural risks, curriculum coherence, and governance compliance across their degree programmes. Built for speed and privacy, it interprets standard educational definitions (programmes, modules, outcomes, and assessments) to immediately surface actionable mapping defects before they impact faculty productivity and student experiences.
 
+## 🔗 Role in the CloudPedagogy Ecosystem
+
+**Phase:** Phase 1 — Curriculum Spine
+
+**Role:**
+Aggregates curriculum health, alignment, and behavioral risk signals to provide institutional oversight across multiple programmes.
+
+**Upstream Inputs:**
+Validated structural data from the **Mapping Engine** and behavioral risk signals from the **Simulation Tool**.
+
+**Downstream Outputs:**
+Provides institutional RAG health summaries used for quality assurance reporting and strategic curriculum review.
+
+**Does NOT:**
+- Perform detailed workload simulation or pathway personalisation.
+- Authorize or record individual human-AI decision outcomes.
+
+For a full system overview, see: [SYSTEM_OVERVIEW.md](../SYSTEM_OVERVIEW.md)
+
 📘 **New to the system?** Please refer to the comprehensive [User Manual](USER_MANUAL.md) for detailed step-by-step instructions on navigating the dashboard, interpreting AI oversight signals, and tracking curriculum snapshots.
 
 ---
@@ -27,6 +46,11 @@ The demonstration uses entirely synthetic data and represents a fictional multi-
 ---
 
 ## 2. Key Features
+- **Programme Health Summary:** Authoritative baseline view (landing page) summarizing institutional oversight across curriculum alignment, assessment coverage, and risk distribution.
+- **RAG Risk Classification System:** Automated "Traffic Light" grading for modules and programmes:
+  - **Red**: Unassessed outcomes or zero-active-skill modules detected.
+  - **Amber**: Low assessment density (less than 1.0 assessment per outcome).
+  - **Green**: Full structural coverage and alignment verified.
 - **Deterministic Analytics Engine:** Automated logic that detects highly shared modules, unassessed outcomes, and over-concentrated curriculum traps natively.
 - **Programme Comparison Matrix:** Instantly stack up to 3 distinct programmes side-by-side to contrast structural metrics and governance completion.
 - **Assessment Load Clustering:** Identifies scheduling clash risks (e.g., excessive student assessment volume) aggregated tightly within specific weekly intervals.
@@ -84,7 +108,6 @@ The localized data engine mathematically normalizes four mapping vectors:
 ## 9. Roadmap (v1.1 Improvements)
 - **JSON Payload Engine:** Allowing explicit `.json` file exports and imports directly into the UI, breaking the dependence on strict `localStorage` bounding across singular devices.
 - **Printable Executive Summary:** A one-click PDF abstraction generator stripping away UI buttons and compiling your Overview metrics and Analytics Insight flags into a clean letterhead format suitable for QA board review meetings.
-- **Visual "Traffic Light" Heatmaps:** Augmenting standard data-tables to automatically color-grade week intervals, violently accelerating institutional visual digestion formatting.
 
 ---
 

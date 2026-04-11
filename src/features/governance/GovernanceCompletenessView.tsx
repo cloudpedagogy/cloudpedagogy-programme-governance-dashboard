@@ -1,5 +1,5 @@
-
 import type { CombinedDataset } from '../../types';
+import { calculateModuleHealth } from '../../lib/governance/scoring';
 
 interface GovernanceCompletenessViewProps {
   dataset: CombinedDataset;
@@ -10,27 +10,26 @@ export function GovernanceCompletenessView({ dataset }: GovernanceCompletenessVi
 
   const govData = modules.map(mod => {
     const meta = governanceMetadata[mod.id] || {};
-    const docOut = meta.documentedOutcomes ?? 0;
-    const asMap = meta.assessmentMapping ?? 0;
-    const depClarity = meta.dependencyClarity ?? 0;
-    const progAlign = meta.programmeAlignmentEvidence ?? 0;
+    const health = calculateModuleHealth(mod);
     
-    const score = ((docOut + asMap + depClarity + progAlign) / 4) * 100;
-
     return {
       id: mod.id,
+      moduleId: mod.id,
       code: mod.code,
+      status: health.status,
       title: mod.title,
-      docOut: docOut * 100,
-      asMap: asMap * 100,
-      depClarity: depClarity * 100,
-      progAlign: progAlign * 100,
-      score
+      docOut: (meta.documentedOutcomes ?? 0) * 100,
+      asMap: (meta.assessmentMapping ?? 0) * 100,
+      depClarity: (meta.dependencyClarity ?? 0) * 100,
+      progAlign: (meta.programmeAlignmentEvidence ?? 0) * 100,
     };
   });
 
   // Sort weakest modules first
-  govData.sort((a, b) => a.score - b.score);
+  govData.sort((a, b) => {
+    const order = { red: 0, amber: 1, green: 2 };
+    return order[a.status] - order[b.status];
+  });
 
   return (
     <div className="feature-view">
@@ -77,8 +76,14 @@ export function GovernanceCompletenessView({ dataset }: GovernanceCompletenessVi
               </td>
               <td>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{data.score.toFixed(0)}%</span>
-                  {data.score < 80 && <span className="badge">Review Req.</span>}
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                    data.status === 'red' ? 'bg-red-100 text-red-700' :
+                    data.status === 'amber' ? 'bg-amber-100 text-amber-700' :
+                    'bg-emerald-100 text-emerald-700'
+                  }`}>
+                    {data.status}
+                  </span>
+                  {data.status !== 'green' && <span className="text-[10px] text-slate-400 italic">Review Req.</span>}
                 </div>
               </td>
             </tr>
