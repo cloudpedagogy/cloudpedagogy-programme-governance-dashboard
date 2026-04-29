@@ -165,6 +165,44 @@ function App() {
         />
       )}
 
+      {/* Lightweight capability and governance layer */}
+      {/* Optional, non-blocking, and does not alter core workflow */}
+      {dataset && (
+        <div style={{ margin: '2rem auto', maxWidth: '1200px', padding: '0 1rem' }}>
+          <details style={{ fontSize: '0.85rem', color: '#666', background: '#f9f9f9', padding: '0.5rem 1rem', borderRadius: '4px', border: '1px solid #eee' }}>
+            <summary style={{ cursor: 'pointer', fontWeight: '500' }}>Capability & Governance Notes (Optional)</summary>
+            <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 'bold' }}>Capability Notes</label>
+                <textarea 
+                  placeholder="What capability this supports, suggested AI use pattern, reflection prompt..."
+                  style={{ width: '100%', minHeight: '60px', padding: '0.5rem', fontFamily: 'inherit', fontSize: 'inherit', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#fff' }}
+                  value={dataset.capabilityNotes || ''}
+                  onChange={(e) => {
+                    const updated = { ...dataset, capabilityNotes: e.target.value };
+                    setDataset(updated);
+                    storage.saveDataset(updated);
+                  }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 'bold' }}>Governance Notes</label>
+                <textarea 
+                  placeholder="Rationale, assumptions, risks, human review notes..."
+                  style={{ width: '100%', minHeight: '60px', padding: '0.5rem', fontFamily: 'inherit', fontSize: 'inherit', border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#fff' }}
+                  value={dataset.governanceNotes || ''}
+                  onChange={(e) => {
+                    const updated = { ...dataset, governanceNotes: e.target.value };
+                    setDataset(updated);
+                    storage.saveDataset(updated);
+                  }}
+                />
+              </div>
+            </div>
+          </details>
+        </div>
+      )}
+
       <BrandFooter />
     </div>
   );

@@ -20,7 +20,6 @@ Provides institutional RAG health summaries used for quality assurance reporting
 - Perform detailed workload simulation or pathway personalisation.
 - Authorize or record individual human-AI decision outcomes.
 
-For a full system overview, see: [SYSTEM_OVERVIEW.md](../SYSTEM_OVERVIEW.md)
 
 📘 **New to the system?** Please refer to the comprehensive [User Manual](USER_MANUAL.md) for detailed step-by-step instructions on navigating the dashboard, interpreting AI oversight signals, and tracking curriculum snapshots.
 
@@ -137,3 +136,14 @@ CloudPedagogy develops open, governance-credible resources for building confiden
 
 - Website: https://www.cloudpedagogy.com/
 - Framework: https://github.com/cloudpedagogy/cloudpedagogy-ai-capability-framework
+
+---
+
+## Capability and Governance
+
+This tool supports both AI capability development and lightweight governance.
+
+- Capability is developed through structured interaction with real workflows
+- Governance is supported through optional fields that make assumptions, risks, and decisions visible
+
+All governance inputs are optional and designed to support — not constrain — professional judgement.

@@ -118,4 +118,6 @@ export interface CombinedDataset {
   governanceMetadata: Record<string, GovernanceMetadata>; // e.g. keyed by module ID
   aiGovernanceRecords?: AIGovernanceRecord[];
   decisionRecords?: DecisionRecord[];
+  capabilityNotes?: string;
+  governanceNotes?: string;
 }

@@ -46,3 +46,10 @@ This dashboard provides a unified, high-level overview of curriculum health and 
 ---
 ### 10. Tips
 - Use the quick "Why is this Red/Amber" tooltips provided next to problematic modules to jumpstart your investigation.
+
+---
+### 11. Capability and Governance
+- **What the tool does**: The dashboard provides a unified, high-level overview of curriculum health and alignment signals, supporting institutional governance and oversight.
+- **How capability is developed**: Capability is developed through structured interaction with real workflows, allowing users to apply professional judgement and evaluate systemic gaps.
+- **How governance is supported**: Governance is supported through a dedicated, optional notes section that makes rationale, assumptions, risks, and review notes visible.
+- **Optional fields**: You can record 'Capability Notes' (what capability this supports, suggested use patterns) and 'Governance Notes' (rationale, risks, assumptions). All governance inputs are optional and designed to support — not constrain — professional judgement.
